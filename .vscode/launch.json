@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProtApplication<prot>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.comedyhub.prot.ProtApplication",
+            "projectName": "prot",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
