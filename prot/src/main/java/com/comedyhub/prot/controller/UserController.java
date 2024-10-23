@@ -57,5 +57,20 @@ public class UserController {
 	        return ResponseEntity.status(404).body(message);
         }
     }
+
+    
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Map<String,String>> getUserByEmail(@RequestParam String email) {
+        Map<String, String> message = new HashMap<>();
+        try {
+        	message.put("message", "User with email " + email + " found");
+        	UserDtoResponse user = userService.getUserByEmail(email);	
+        	return ResponseEntity.status(200).body(message);
+        } catch(Exception e) {
+        	message.put("message", "User with email " + email + " not found");
+	        return ResponseEntity.status(404).body(message);
+        }
+    }
+
     
 }

@@ -15,7 +15,6 @@ import com.comedyhub.prot.model.User;
 import com.comedyhub.prot.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -75,6 +74,14 @@ public class UserService implements UserDetailsService {
 
 	public UserDtoResponse getUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new RuntimeException("User not found");
+		}
+		return userMapper.toDTO(user);
+	}
+
+    public UserDtoResponse getUserByEmail(String email){
+		User user = userRepository.findByEmail(email);
 		if (user == null) {
 			throw new RuntimeException("User not found");
 		}
