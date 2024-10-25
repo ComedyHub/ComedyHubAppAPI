@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import com.comedyhub.prot.dto.LoginRequest;
 import com.comedyhub.prot.dto.TokenResponse;
 import com.comedyhub.prot.dto.UserDtoCreate;
-import com.comedyhub.prot.dto.UserDtoResponse;
 import com.comedyhub.prot.service.UserService;
 
 @RestController
