@@ -3,6 +3,8 @@ package com.comedyhub.prot.controller;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import com.comedyhub.prot.dto.UserDtoResponse;
+import com.comedyhub.prot.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,13 +44,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDtoCreate userDto) {
-        userService.createUser(userDto);
+        UserDtoResponse userDtoResponse = userService.createUser(userDto);
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = createToken(authentication.getName());
+        String token = createToken(userDtoResponse.getId());
 
         return ResponseEntity.ok(new TokenResponse(token));
     }
@@ -60,22 +62,27 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = createToken(authentication.getName());
+            UserDtoResponse userDTO = new UserDtoResponse();
 
+            if(authentication.isAuthenticated()) {
+                    userDTO = userService.getUserByUsername(loginRequest.getUsername());
+            }
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = createToken(userDTO.getId());
             return ResponseEntity.ok(new TokenResponse(token));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    private String createToken(String username) {
+    private String createToken(Long id) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
             .expiresAt(now.plus(1, ChronoUnit.HOURS))
-            .subject(username)
+            .subject(id.toString())
             .claim("scope", "ROLE_USER")
             .build();
         JwtEncoderParameters encoderParams = JwtEncoderParameters.from(claims);

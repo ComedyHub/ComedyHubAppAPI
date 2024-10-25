@@ -40,6 +40,7 @@ public class UserService implements UserDetailsService {
 
     public UserDtoResponse createUser(UserDtoCreate userDTO) {
     	User user = new User();
+        //Fazer verificação de username e email
         user.setName(userDTO.getUsername());
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -53,9 +54,8 @@ public class UserService implements UserDetailsService {
         return userMapper.toDTO(users);
     }
 
-    public UserDtoResponse getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        return userMapper.toDTO(user);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
