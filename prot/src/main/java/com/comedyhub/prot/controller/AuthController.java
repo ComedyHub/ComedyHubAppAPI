@@ -81,7 +81,7 @@ public class AuthController {
         JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuer("self")
             .issuedAt(now)
-            .expiresAt(now.plus(1, ChronoUnit.WEEKS))
+            .expiresAt(now.plus(30, ChronoUnit.DAYS))
             .subject(id.toString())
             .claim("scope", "ROLE_USER")
             .build();
