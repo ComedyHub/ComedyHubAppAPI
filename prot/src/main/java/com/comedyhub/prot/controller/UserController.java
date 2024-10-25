@@ -1,5 +1,6 @@
 package com.comedyhub.prot.controller;
 
+import com.comedyhub.prot.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,11 @@ public class UserController {
     		message.put("message", "User with id " + id + "not found");
     		return ResponseEntity.status(404).body(message);
     	}
+    }
+
+    @GetMapping("/username/auth/{username}")
+    public ResponseEntity<User> getUserByLikeUsername(@PathVariable String username) {
+        return ResponseEntity.ok(userService.getUserByLikeUsername(username));
     }
 
     @GetMapping("/username/{username}")

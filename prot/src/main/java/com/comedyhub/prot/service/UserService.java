@@ -75,6 +75,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username) != null;
     }
 
+    public User getUserByLikeUsername(String username) {
+        return userRepository.findByUsername(username.toLowerCase());
+    }
+
 	public UserDtoResponse getUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		if (user == null) {
