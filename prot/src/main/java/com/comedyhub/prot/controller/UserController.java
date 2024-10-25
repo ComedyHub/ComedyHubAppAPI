@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/username/auth/{username}")
-    public ResponseEntity<User> getUserByLikeUsername(@PathVariable String username) {
+    public ResponseEntity<List<User>> getUserByLikeUsername(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserByLikeUsername(username));
     }
 
