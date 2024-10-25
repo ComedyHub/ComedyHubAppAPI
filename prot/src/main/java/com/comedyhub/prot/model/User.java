@@ -1,14 +1,8 @@
 package com.comedyhub.prot.model;
 
-import java.util.List;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +11,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -33,69 +30,63 @@ public class User {
     @Column
     private String profileImageUrl;
 
-    @ManyToMany
-    private List<User> followers;
-    
-    @ManyToMany
-    private List<User> following;
+    @Column
+    private String profileBannerUrl;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserFollower> followers = new HashSet<>();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserFollower> following = new HashSet<>();
 
-    public String getUsername() {
-        return username;
-    }
+    @OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserBlock> blocks = new HashSet<>();
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserMemeInteraction> memeInteractions = new HashSet<>();
 
-    public String getPassword() {
-        return password;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MemeComment> comments = new HashSet<>();
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public User() {}
 
-    public String getEmail() {return email;}
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setEmail(String email) {this.email = email;}
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getProfileDescription() {
-        return profileDescription;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setProfileDescription(String profileDescription) {
-        this.profileDescription = profileDescription;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
+    public String getProfileDescription() { return profileDescription; }
+    public void setProfileDescription(String profileDescription) { this.profileDescription = profileDescription; }
 
-    public List<User> getFollowers() {
-        return followers;
-    }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 
-    public void setFollowers(List<User> followers) {
-        this.followers = followers;
-    }
-    
-    public List<User> getFollowing(){
-    	return following;
-    }
-    
-    public void setFollowing(List<User> following) {
-    	this.following = following;
-    }
+    public String getProfileBannerUrl() { return profileBannerUrl; }
+    public void setProfileBannerUrl(String profileBannerUrl) { this.profileBannerUrl = profileBannerUrl; }
+
+    public Set<UserFollower> getFollowers() { return followers; }
+    public void setFollowers(Set<UserFollower> followers) { this.followers = followers; }
+
+    public Set<UserFollower> getFollowing() { return following; }
+    public void setFollowing(Set<UserFollower> following) { this.following = following; }
+
+    public Set<UserMemeInteraction> getMemeInteractions() { return memeInteractions; }
+    public void setMemeInteractions(Set<UserMemeInteraction> memeInteractions) { this.memeInteractions = memeInteractions; }
+
+    public Set<UserBlock> getBlocks() {return blocks;}
+    public void setBlocks(Set<UserBlock> blocks) {this.blocks = blocks;}
+
+    public Set<MemeComment> getComments() {return comments;}
+    public void setComments(Set<MemeComment> comments) {this.comments = comments;}
 }
